@@ -31,36 +31,25 @@ public class Room
     }
 
     public Room getExit(String direction){
-        Room nextRoom = null;
-        /*if(direction.equals("north")) {
-            nextRoom = northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = eastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = westExit;
-        }
-       */ return nextRoom;
+        Room nextRoom = exits.get(direction);
+        return nextRoom;
     }
     
     /** * Return a description of the room’s exits,
     * for example, "Exits: north west".
     * @return A description of the available exits.
     */
+    public String getLongDescription() {
+        return "You are " + description + "/n" + getExitString(); 
+    }
+      
     public String getExitString() {
-        String exitString = "You are " + description;
-        exitString = exitString + "\nExits: ";
-        
-        for(String direction:exits.keySet()) {
+      String exitString = "\nExits: ";
+      for(String direction:exits.keySet()) {
             exitString += ("" + direction);
         }    
-        return exitString;  
+        return exitString;
     }
-    
     /**
      * Define the exits of this room.  Every direction either leads
      * to another room or is null (no exit there).

@@ -19,7 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+    private Room previousRoom;   
     /**
      * Create the game and initialise its internal map.
      */
@@ -42,6 +42,13 @@ public class Game
         pub = new Room("in the campus pub");
         lab = new Room("in a computing lab");
         office = new Room("in the computing admin office");
+        
+        // create items
+        Item flashlight = new Item("Flashlight", "A small, battery-powered flashlight", 0.5);
+        Item book = new Item("Old Book", "An ancient book with a cracked cover", 1.2);
+        
+        lab.addItem(flashlight);
+        pub.addItem(book);
         
         // initialise room exits
         outside.setExit("east",theater);
@@ -88,6 +95,8 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
+        System.out.println("You are " + currentRoom.getDescription());
+        System.out.print("Exits: ");
         printLocationInfo();
     }
 
@@ -127,19 +136,29 @@ public class Game
         else if (commandWord.equals("eat")) {
             System.out.println("You have eaten now and you are not hungry any more.");
         }
-        
-
+         else if (commandWord.equals("back")) {
+            goBack();
+        }
         return wantToQuit;
     }
 
-    // implementations of user commands:
+    private void goBack() {
+       if (previousRoom == null) {
+        System.out.println("You haven't gone anywhere yet.");
+       } else {
+             Room temp = currentRoom;
+             currentRoom = previousRoom;
+             previousRoom = temp;
+             printLocationInfo();
+        }
+    }
 
     /**
      * Print out some help information.
      * Here we print some stupid, cryptic message and a list of the 
      * command words.
      */
-    private void printHelp() 
+     private void printHelp() 
     {
         System.out.println("You are lost. You are alone. You wander");
         System.out.println("around at the university.");
@@ -169,6 +188,7 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            previousRoom = currentRoom;
             currentRoom = nextRoom;
             printLocationInfo();
         }
@@ -190,3 +210,5 @@ public class Game
         }
     }
 }
+//24)Yes it does  work
+//25)the first time it sends you back otuside but when it says back twice it says you have not gone anywhere

@@ -1,5 +1,5 @@
 import java.util.HashMap;
-
+import java.util.ArrayList;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -18,6 +18,8 @@ public class Room
 {
     private String description;
     private HashMap<String,Room> exits;
+    private ArrayList<Item> items;
+
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -28,28 +30,52 @@ public class Room
     {
         this.description = description;
         exits = new HashMap<>();
-    }
+        items = new ArrayList<>();
 
-    public Room getExit(String direction){
-        Room nextRoom = exits.get(direction);
-        return nextRoom;
     }
+    
+    public void addItem(Item item) {
+        items.add(item);
+    }
+    
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+    
+    public Room getExit(String direction){
+        return exits.get(direction);
+    }
+    
     
     /** * Return a description of the room’s exits,
     * for example, "Exits: north west".
     * @return A description of the available exits.
     */
-    public String getLongDescription() {
-        return "You are " + description + "/n" + getExitString(); 
+     public String getLongDescription() {
+        return "You are " + description + "/n" + getExitString() + ".\n"  + getItemDescriptions();
+    
     }
       
     public String getExitString() {
-      String exitString = "\nExits: ";
+      String exitString = "Exit:";
       for(String direction:exits.keySet()) {
             exitString += ("" + direction);
         }    
         return exitString;
     }
+    
+    private String getItemDescriptions() {
+        if (items.isEmpty()) {
+            return "There are no items here.";
+        }
+
+        String description = "Items in the room:";
+        for (Item item : items) {
+            description += "\n - " + item.getDescription();
+        }
+        return description;
+    }
+    
     /**
      * Define the exits of this room.  Every direction either leads
      * to another room or is null (no exit there).
